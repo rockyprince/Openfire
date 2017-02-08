@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<plugin>
+    <class>com.rockyprince.Apns</class>
+    <name>APNS</name>
+    <description>send push notification to iOS devices</description>
+    <author>rockyprince</author>
+    <version>1.0.0</version>
+    <date>01/01/2017</date>
+    <minServerVersion>4.0.0</minServerVersion>
+    <databaseKey>apns</databaseKey>
+    <databaseVersion>0</databaseVersion>
+    
+    <adminconsole>
+        <tab id="tab-server">
+            <sidebar id="sidebar-server-settings">
+                <item id="apns" name="APNS" url="apns-form.jsp"
+                     description="Click to manage the service that allows to configure the Openfire over a APNS" />
+            </sidebar>
+        </tab>
+    </adminconsole>
+</plugin>

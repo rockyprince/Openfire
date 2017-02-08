@@ -33,6 +33,14 @@ public final class ExceptionType {
 
 	/** The Constant ALREADY_EXISTS. */
 	public static final String ALREADY_EXISTS = "AlreadyExistsException";
+        
+	/** The Constant PRIVACY_LIST_ITEM_NOT_FOUND. */
+	public static final String PRIVACY_LIST_ITEM_NOT_FOUND = "PrivacyListItemNotFoundException"; //rockyprince
+        
+        
+	/** The Constant DEVICE_TOKEN_NOT_FOUND. */
+	public static final String DEVICE_TOKEN_NOT_FOUND = "DeviceTokenNotFoundException"; //rockyprince
+        
 	/**
 	 * Instantiates a new exception type.
 	 */

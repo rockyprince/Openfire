@@ -1,5 +1,8 @@
 package org.jivesoftware.openfire.plugin.rest.service;
 
+import java.util.ArrayList; //rockyprince
+import java.util.Collection; //rockyprince
+import java.util.List; //rockyprince
 import javax.annotation.PostConstruct;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -38,6 +41,14 @@ public class UserService {
 	@POST
 	public Response createUser(UserEntity userEntity) throws ServiceException {
 		plugin.createUser(userEntity);
+		return Response.status(Response.Status.CREATED).build();
+	}
+
+        //rockyprince
+	@POST
+        @Path("/create_users")
+	public Response createUsers(UserEntity userEntities) throws ServiceException {
+		plugin.createUsers(userEntities);
 		return Response.status(Response.Status.CREATED).build();
 	}
 

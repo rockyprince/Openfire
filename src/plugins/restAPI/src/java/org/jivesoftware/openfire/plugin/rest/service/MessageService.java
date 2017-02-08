@@ -25,4 +25,12 @@ public class MessageService {
 		messageController.sendBroadcastMessage(messageEntity);
 		return Response.status(Response.Status.CREATED).build();
 	}
+    
+        //rockyprince
+	@POST
+	@Path("/user")
+	public Response sendSingleMessage(MessageEntity messageEntity) throws ServiceException {
+		messageController.sendSingleMessage(messageEntity);
+		return Response.status(Response.Status.CREATED).build();
+	}
 }

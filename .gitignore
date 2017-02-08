@@ -20,3 +20,5 @@ out/
 # Ignore Netbeans project files
 nbproject/
 nbbuild/
+build.xml
+manifest.mf

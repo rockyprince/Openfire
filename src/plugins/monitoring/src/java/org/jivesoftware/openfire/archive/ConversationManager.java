@@ -39,6 +39,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 import org.dom4j.Element;
+import org.dom4j.Document; //rockyprince
+import org.dom4j.DocumentHelper; //rockyprince
 import org.jivesoftware.database.DbConnectionManager;
 import org.jivesoftware.openfire.XMPPServer;
 import org.jivesoftware.openfire.XMPPServerInfo;
@@ -59,6 +61,7 @@ import org.jivesoftware.util.NotFoundException;
 import org.jivesoftware.util.PropertyEventDispatcher;
 import org.jivesoftware.util.PropertyEventListener;
 import org.jivesoftware.util.StringUtils;
+//import org.apache.commons.lang.StringUtils; //rockyprince
 import org.jivesoftware.util.cache.CacheFactory;
 import org.picocontainer.Startable;
 import org.slf4j.Logger;
@@ -85,8 +88,8 @@ public class ConversationManager implements Startable, ComponentEventListener{
 
 	private static final String UPDATE_CONVERSATION = "UPDATE ofConversation SET lastActivity=?, messageCount=? WHERE conversationID=?";
 	private static final String UPDATE_PARTICIPANT = "UPDATE ofConParticipant SET leftDate=? WHERE conversationID=? AND bareJID=? AND jidResource=? AND joinedDate=?";
-	private static final String INSERT_MESSAGE = "INSERT INTO ofMessageArchive(messageID, conversationID, fromJID, fromJIDResource, toJID, toJIDResource, sentDate, body, stanza) "
-			+ "VALUES (?,?,?,?,?,?,?,?,?)";
+	private static final String INSERT_MESSAGE = "INSERT INTO ofMessageArchive(messageID, conversationID, fromJID, fromJIDResource, toJID, toJIDResource, sentDate, body, stanza, id, subject, messageType, targetType, atUsers, lng, lat) "
+			+ "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"; //rockyprince
 	private static final String CONVERSATION_COUNT = "SELECT COUNT(*) FROM ofConversation";
 	private static final String MESSAGE_COUNT = "SELECT COUNT(*) FROM ofMessageArchive";
 	private static final String DELETE_CONVERSATION_1 = "DELETE FROM ofMessageArchive WHERE conversationID=?";
@@ -991,6 +994,24 @@ public class ConversationManager implements Startable, ComponentEventListener{
 					
 					int count = 0;
 					while ((message = messageQueue.poll()) != null) {
+                                            //rockyprince
+                                                String msgType = org.apache.commons.lang.StringUtils.substringBetween(message.getBody(), "<msg_type>", "</msg_type>");
+                                                Document rootDoc = DocumentHelper.parseText(message.getStanza());
+                                                Element rootElm = rootDoc.getRootElement();
+                                                String id = rootElm.attributeValue("id");
+                                                String subject = rootElm.elementText("subject");
+                                                Element extElm = rootElm.element("ext");
+                                                String targetType = extElm.elementText("target_type");
+                                                String atUsers = "";
+                                                List nodes = extElm.elements("at_users");
+                                                for (Iterator it = nodes.iterator(); it.hasNext();) {
+                                                    Element elm = (Element) it.next();
+                                                    atUsers += elm.getText() + ",";
+                                                }
+                                                String lng = extElm.elementText("lng");
+                                                String lat = extElm.elementText("lat");
+                                                //messageID, conversationID, fromJID, fromJIDResource, toJID, toJIDResource, sentDate, body, stanza, id, subject, messageType, targetType, atUsers, lng, lat
+                                                //rockyprince
 						pstmt.setInt(1, ++msgCount);
 						pstmt.setLong(2, message.getConversationID());
 						pstmt.setString(3, message.getFromJID().toBareJID());
@@ -1000,6 +1021,15 @@ public class ConversationManager implements Startable, ComponentEventListener{
 						pstmt.setLong(7, message.getSentDate().getTime());
 						DbConnectionManager.setLargeTextField(pstmt, 8, message.getBody());
 						DbConnectionManager.setLargeTextField(pstmt, 9, message.getStanza());
+                                                //rockyprince
+                                                pstmt.setString(10, id);
+                                                pstmt.setString(11, subject);
+                                                pstmt.setString(12, msgType);
+                                                pstmt.setInt(13, Integer.parseInt(targetType));
+                                                DbConnectionManager.setLargeTextField(pstmt, 14, atUsers);
+                                                pstmt.setString(15, lng);
+                                                pstmt.setString(16, lat);
+                                                //rockyprince
 						if (DbConnectionManager.isBatchUpdatesSupported()) {
 							pstmt.addBatch();
 						} else {

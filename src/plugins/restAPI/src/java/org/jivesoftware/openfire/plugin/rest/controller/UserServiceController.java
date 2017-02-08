@@ -13,6 +13,7 @@ import org.jivesoftware.openfire.group.Group;
 import org.jivesoftware.openfire.group.GroupManager;
 import org.jivesoftware.openfire.group.GroupNotFoundException;
 import org.jivesoftware.openfire.lockout.LockOutManager;
+import org.jivesoftware.openfire.vcard.VCardManager; //rockyprince
 import org.jivesoftware.openfire.plugin.rest.dao.PropertyDAO;
 import org.jivesoftware.openfire.plugin.rest.entity.GroupEntity;
 import org.jivesoftware.openfire.plugin.rest.entity.RosterEntities;
@@ -34,6 +35,9 @@ import org.jivesoftware.openfire.user.UserManager;
 import org.jivesoftware.openfire.user.UserNotFoundException;
 import org.xmpp.packet.JID;
 import org.xmpp.packet.StreamError;
+import org.dom4j.Element; //rockyprince
+import org.dom4j.Document; //rockyprince
+import org.dom4j.DocumentHelper; //rockyprince
 
 /**
  * The Class UserServiceController.
@@ -53,6 +57,9 @@ public class UserServiceController {
 	
 	/** The lock out manager. */
 	private LockOutManager lockOutManager;
+        
+        /** The vCard manager. */
+        private VCardManager vCardManager; //rockyprince
 
 	/**
 	 * Gets the single instance of UserServiceController.
@@ -71,6 +78,7 @@ public class UserServiceController {
 		userManager = server.getUserManager();
 		rosterManager = server.getRosterManager();
 		lockOutManager = server.getLockOutManager();
+                vCardManager = server.getVCardManager(); //rockyprince
 	}
 
 	/**
@@ -101,6 +109,46 @@ public class UserServiceController {
 		}
 	}
 
+        //rockyprince
+	/**
+	 * Creates the users.
+	 *
+	 * @param userEntities
+	 *            the user entities
+	 * @throws ServiceException
+	 *             the service exception
+	 */
+	public void createUsers(UserEntity userEntities) throws ServiceException {
+//                List<UserEntity> newuserEntities = userEntities.getUsers();
+//                if (newuserEntities != null) {
+////                    List<UserEntity> newuserEntities = userEntities.getUsers();
+//                    for (UserEntity userEntity : newuserEntities) {
+//                        if (userEntity != null && !userEntity.getUsername().isEmpty()) {
+//                                if (userEntity.getPassword() == null) {
+//                                        throw new ServiceException("Could not create new user, because password is null",
+//                                                        userEntity.getUsername(), "PasswordIsNull", Response.Status.BAD_REQUEST);
+//                                }
+//                                try {
+//                                        userManager.createUser(userEntity.getUsername(), userEntity.getPassword(), userEntity.getName(),
+//                                                        userEntity.getEmail());
+//                                } catch (UserAlreadyExistsException e) {
+//                                        throw new ServiceException("Could not create new user", userEntity.getUsername(),
+//                                                        ExceptionType.USER_ALREADY_EXISTS_EXCEPTION, Response.Status.CONFLICT);
+//                                }
+//                                addProperties(userEntity.getUsername(), userEntity.getProperties());
+//                        } else {
+//                                throw new ServiceException("Could not create new user",
+//                                                "users", ExceptionType.ILLEGAL_ARGUMENT_EXCEPTION, Response.Status.BAD_REQUEST);
+//                        }
+//                    }
+//		} else {
+//			throw new ServiceException("Could not create new users",
+//					"users", ExceptionType.ILLEGAL_ARGUMENT_EXCEPTION, Response.Status.BAD_REQUEST);
+//		}
+            UserUtils.convertUserToUserEntity(getAndCheckUser("test1"));
+	}
+//rockyprince
+        
 	/**
 	 * Update user.
 	 *
@@ -494,8 +542,38 @@ public class UserServiceController {
 		user.getProperties().clear();
 		if (properties != null) {
 			for (UserProperty property : properties) {
-				user.getProperties().put(property.getKey(), property.getValue());
+                                String value = property.getValue(); //rockyprince
+                                String newValue = (value == null? "" : value); //rockyprince
+				user.getProperties().put(property.getKey(), newValue); //rockyprince
 			}
+		}
+                addVCard(user.getUsername(), properties); //rockyprince
+	}
+        
+	/**
+	 * Adds the VCard. //rockyprince
+	 *
+	 * @param userEntity
+	 *            the user entity
+	 * @throws ServiceException
+	 *             the service exception
+	 */
+	private void addVCard(String username, List<UserProperty> properties) throws ServiceException {
+                Document document = DocumentHelper.createDocument();
+                Element vCardElement = document.addElement("vCard", "vcard-temp");
+		if (properties != null) {
+			for (UserProperty property : properties) {
+                                Element keyElement = vCardElement.addElement(property.getKey().toUpperCase(), "");
+                                String value = property.getValue();
+                                String newValue = (value == null? "" : value);
+                                keyElement.setText(newValue);
+			}
+		}
+		try {
+			vCardManager.setVCard(username, vCardElement);
+		} catch (Exception e) {
+			throw new ServiceException("Could not get user", username, ExceptionType.ILLEGAL_ARGUMENT_EXCEPTION,
+					Response.Status.NOT_FOUND, e);
 		}
 	}
 
