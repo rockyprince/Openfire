@@ -103,7 +103,9 @@ public class PrivacyListController {
                                                 Element listElement = list.asElement();
                                                 listElement.add(itemElement);
                                                 list = privacyListManager.createPrivacyList(username, listname, listElement);
-                                                privacyListManager.changeDefaultList(username, list, null);
+                                                if (listname == "blacklist"){
+                                                    privacyListManager.changeDefaultList(username, list, null);
+                                                }
                                         }
 			} catch (Exception e) {
                                 e.printStackTrace();

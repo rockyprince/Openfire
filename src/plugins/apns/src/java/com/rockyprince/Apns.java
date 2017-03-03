@@ -251,6 +251,12 @@ public class Apns implements PacketInterceptor, Plugin {
                                     this.debug("in blacklists");
                                     return;
                                 }
+                                // Do not push messages if communication is muted
+                                list = PrivacyListManager.getInstance().getPrivacyList(message.getTo().getNode(), "mutelist");
+                                if (list != null && list.shouldBlockPacket(message)) {
+                                    this.debug("in mutelists");
+                                    return;
+                                }
                                 if (message.getBody() == null || message.getBody().isEmpty()) {
                                         this.debug("not message body");
                                         return;

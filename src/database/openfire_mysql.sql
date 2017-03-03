@@ -1,5 +1,6 @@
 # $Revision: 1650 $
 # $Date: 2005-07-20 00:18:17 -0300 (Wed, 20 Jul 2005) $
+# rockyprince    VARCHAR(255)--->VARCHAR(191)
 
 CREATE TABLE ofUser (
   username              VARCHAR(64)     NOT NULL,
@@ -68,7 +69,7 @@ CREATE TABLE ofRoster (
   nick                  VARCHAR(255),
   PRIMARY KEY (rosterID),
   INDEX ofRoster_unameid_idx (username),
-  INDEX ofRoster_jid_idx (jid(255))
+  INDEX ofRoster_jid_idx (jid(191))
 );
 
 CREATE TABLE ofRosterGroups (
@@ -125,7 +126,7 @@ CREATE TABLE ofVersion (
 );
 
 CREATE TABLE ofExtComponentConf (
-  subdomain             VARCHAR(255)    NOT NULL,
+  subdomain             VARCHAR(191)    NOT NULL,
   wildcard              TINYINT         NOT NULL,
   secret                VARCHAR(255),
   permission            VARCHAR(10)     NOT NULL,
@@ -133,7 +134,7 @@ CREATE TABLE ofExtComponentConf (
 );
 
 CREATE TABLE ofRemoteServerConf (
-  xmppDomain            VARCHAR(255)    NOT NULL,
+  xmppDomain            VARCHAR(191)    NOT NULL,
   remotePort            INTEGER,
   permission            VARCHAR(10)     NOT NULL,
   PRIMARY KEY (xmppDomain)
@@ -151,7 +152,7 @@ CREATE TABLE ofPrivacyList (
 CREATE TABLE ofSASLAuthorized (
   username            VARCHAR(64)   NOT NULL,
   principal           TEXT          NOT NULL,
-  PRIMARY KEY (username, principal(200))
+  PRIMARY KEY (username, principal(191))
 );
 
 CREATE TABLE ofSecurityAuditLog (
@@ -170,7 +171,7 @@ CREATE TABLE ofSecurityAuditLog (
 
 CREATE TABLE ofMucService (
   serviceID           BIGINT        NOT NULL,
-  subdomain           VARCHAR(255)  NOT NULL,
+  subdomain           VARCHAR(191)  NOT NULL,
   description         VARCHAR(255),
   isHidden            TINYINT       NOT NULL,
   PRIMARY KEY (subdomain),

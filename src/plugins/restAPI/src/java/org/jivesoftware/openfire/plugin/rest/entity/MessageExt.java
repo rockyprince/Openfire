@@ -9,14 +9,26 @@ import javax.xml.bind.annotation.XmlType;
  * The Class MessageExt. //rockyprince
  */
 @XmlRootElement(name = "ext")
-@XmlType(propOrder = { "target_type", "at_users", "timestamp", "lng", "lat" })
+@XmlType(propOrder = {"from_id", "from_name", "at_name", "from_avater", "target_type", "at_users", "timestamp", "lng", "lat" })
 public class MessageExt {
 
-	/** The key. */
-	private String target_type;
+	/** The fromId. */
+	private String fromId;
+        
+	/** The fromName. */
+	private String fromName;
+        
+	/** The atName. */
+	private String atName;
+        
+	/** The fromAvater. */
+	private String fromAvater;
+    
+	/** The targetType. */
+	private String targetType;
 
-	/** The value. */
-	private List<String> at_users;
+	/** The atUsers. */
+	private List<String> atUsers;
 
         /** The timestamp. */
 	private String timestamp;
@@ -37,10 +49,18 @@ public class MessageExt {
 	/**
 	 * Instantiates a new message ext.
 	 *
-	 * @param target_type
-	 *            the target_type
-	 * @param at_users
-	 *            the at_users
+	 * @param fromId
+	 *            the fromId
+	 * @param fromName
+	 *            the fromName
+	 * @param atName
+	 *            the atName
+	 * @param fromAvater
+	 *            the fromAvater
+	 * @param targetType
+	 *            the targetType
+	 * @param atUsers
+	 *            the atUsers
 	 * @param timestamp
 	 *            the timestamp
 	 * @param lng
@@ -48,52 +68,136 @@ public class MessageExt {
 	 * @param lat
 	 *            the lat
 	 */
-	public MessageExt(String target_type, List<String> at_users, String timestamp, String lng, String lat) {
-		this.target_type = target_type;
-		this.at_users = at_users;
+	public MessageExt(String fromId, String fromName, String atName, String fromAvater, String targetType, List<String> atUsers, String timestamp, String lng, String lat) {
+		this.fromId = fromId;
+		this.fromName = fromName;
+                this.atName = atName;
+                this.fromAvater = fromAvater;
+		this.targetType = targetType;
+		this.atUsers = atUsers;
                 this.timestamp = timestamp;
                 this.lng = lng;
                 this.lat = lat;
 	}
 
 	/**
-	 * Gets the msg_type.
+	 * Gets the fromId.
 	 *
-	 * @return the msg_type
+	 * @return the fromId
 	 */
         @XmlElement
-	public String getTarget_type() {
-		return target_type;
+	public String getFromId() {
+		return fromId;
 	}
 
 	/**
-	 * Sets the target_type.
+	 * Sets the fromId.
 	 *
-	 * @param target_type
-	 *            the new target_type
+	 * @param fromId
+	 *            the new fromId
 	 */
-	public void setTarget_type(String target_type) {
-		this.target_type = target_type;
+	public void setFromId(String fromId) {
+		this.fromId = fromId;
 	}
 
 	/**
-	 * Gets the at_users.
+	 * Gets the fromName.
 	 *
-	 * @return the at_users
+	 * @return the fromName
 	 */
         @XmlElement
-	public List<String> getAt_users() {
-		return at_users;
+	public String getFromName() {
+		return fromName;
 	}
 
 	/**
-	 * Sets the at_users.
+	 * Sets the fromName.
 	 *
-	 * @param at_users
-	 *            the new at_users
+	 * @param fromName
+	 *            the new fromName
 	 */
-	public void setAt_users(List<String> at_users) {
-		this.at_users = at_users;
+	public void setFromName(String fromName) {
+		this.fromName = fromName;
+	}
+        
+	/**
+	 * Gets the atName.
+	 *
+	 * @return the atName
+	 */
+        @XmlElement
+	public String getAtName() {
+		return atName;
+	}
+
+	/**
+	 * Sets the atName.
+	 *
+	 * @param atName
+	 *            the new atName
+	 */
+	public void setAtName(String atName) {
+		this.atName = atName;
+	}
+        
+	/**
+	 * Gets the fromAvater.
+	 *
+	 * @return the fromAvater
+	 */
+        @XmlElement
+	public String getFromAvater() {
+		return fromAvater;
+	}
+
+	/**
+	 * Sets the fromAvater.
+	 *
+	 * @param fromAvater
+	 *            the new fromAvater
+	 */
+	public void setFromAvater(String fromAvater) {
+		this.fromAvater = fromAvater;
+	}
+        
+	/**
+	 * Gets the targetType.
+	 *
+	 * @return the targetType
+	 */
+        @XmlElement
+	public String getTargetType() {
+		return targetType;
+	}
+
+	/**
+	 * Sets the targetType.
+	 *
+	 * @param targetType
+	 *            the new targetType
+	 */
+	public void setTargetType(String targetType) {
+		this.targetType = targetType;
+	}
+
+	/**
+	 * Gets the atUsers.
+	 *
+	 * @return the atUsers
+	 */
+        @XmlElement
+	public List<String> getAtUsers() {
+		return atUsers;
+	}
+
+	/**
+	 * Sets the atUsers.
+	 *
+	 * @param atUsers
+	 *            the new atUsers
+	 */
+	public void setAtUsers(List<String> atUsers) {
+		this.atUsers = atUsers;
 	}
         
 	/**

@@ -20,7 +20,7 @@ CREATE TABLE ofConParticipant (
   conversationID       BIGINT         NOT NULL,
   joinedDate           BIGINT         NOT NULL,
   leftDate             BIGINT         NULL,
-  bareJID              VARCHAR(200)   NOT NULL,
+  bareJID              VARCHAR(191)   NOT NULL,
   jidResource          VARCHAR(100)   NOT NULL,
   nickname             VARCHAR(255)   NULL,
   INDEX ofConParticipant_conv_idx (conversationID, bareJID, jidResource, joinedDate),

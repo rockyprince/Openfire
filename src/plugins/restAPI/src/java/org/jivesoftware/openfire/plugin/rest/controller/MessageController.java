@@ -126,21 +126,31 @@ public class MessageController {
             message.setType(Message.Type.chat);
             if (ext != null){
                 Element root = extElement.getElement();
+                Element fromIdElement = root.addElement("from_id");
+                fromIdElement.setText(ext.getFromId());
+                Element fromNameElement = root.addElement("from_name");
+                fromNameElement.setText(ext.getFromName());
+                if (ext.getAtName() != null && !ext.getAtName().isEmpty()){
+                    Element atNameElement = root.addElement("at_name");
+                    atNameElement.setText(ext.getAtName());
+                }
+                Element fromAvaterElement = root.addElement("from_avater");
+                fromAvaterElement.setText(ext.getFromAvater());
                 Element targetTypeElement = root.addElement("target_type");
-                if (ext.getTarget_type() != null && !ext.getTarget_type().isEmpty()){
-                    targetTypeElement.setText(ext.getTarget_type());
+                if (ext.getTargetType() != null && !ext.getTargetType().isEmpty()){
+                    targetTypeElement.setText(ext.getTargetType());
                 } else {
                     targetTypeElement.setText("1");
                 }
-                List<String> at_users = ext.getAt_users();
-                if (at_users != null){
-                    for (String at_user : at_users) {
+                List<String> atUsers = ext.getAtUsers();
+                if (atUsers != null){
+                    for (String atUser : atUsers) {
                         Element atUsersElement = root.addElement("at_users");
-                        atUsersElement.setText(at_user);
+                        atUsersElement.setText(atUser);
                     }
                 }
                 Element timeStampElement = root.addElement("timestamp");
-                if (ext.getTarget_type() != null && !ext.getTarget_type().isEmpty()){
+                if (ext.getTargetType() != null && !ext.getTargetType().isEmpty()){
                     timeStampElement.setText(ext.getTimestamp());
                 } else {
                     Date date = new Date();
